@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        .container {
+            top:50%;
+            left: 50%;
+            position: absolute;
+            transform: translate(-50%,-50%);
+            text-align: center;
+        }
+        .dev {
+            width:175px;
+            min-width: 60%;
+            max-width: 100% ;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgb(11, 0, 170);
+        }
+        
+        .loaderBar {
+            width: calc(160px / 0.707);
+            top:50%;
+            left: 50%;
+            position: absolute;
+            transform: translate(-50%,-50%);
+            height: 10px;
+            background: #F9F9F9;
+            border-radius: 10px;
+            border: 1px solid #006DFE;
+            position: relative;
+            overflow: hidden;
+            }
+
+            .loaderBar::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: 5px;
+            background: repeating-linear-gradient(45deg, #0031F2 0 30px, #006DFE 0 40px) right/200% 100%;
+            animation: fillProgress 6s ease-in-out 1, lightEffect 1s infinite linear;
+            animation-fill-mode: forwards;
+            }
+
+            @keyframes fillProgress {
+            0% {
+                width: 0;
+            }
+
+            33% {
+                width: 33.333%;
+            }
+
+            66% {
+                width: 66.67%;
+            }
+
+            100% {
+                width: 100%;
+            }
+            }
+
+            @keyframes lightEffect {
+            0%, 20%, 40%, 60%, 80%, 100% {
+                background: repeating-linear-gradient(45deg, #0031F2 0 30px, #006DFE 0 40px) right/200% 100%;
+            }
+
+            10%, 30%, 50%, 70%, 90% {
+                background: repeating-linear-gradient(45deg, #0031F2 0 30px, #006DFE 0 40px, rgba(255, 255, 255, 0.3) 0 40px) right/200% 100%;
+            }
+            }
+            #msg {
+                margin-top: 15px;
+                font-weight: bold;
+                color: red;
+                font-size: 17px;
+                
+                animation: showMsg 6s linear 1;
+            }
+            @keyframes showMsg {
+                0% {
+                    opacity: 0;
+                }
+                99.999999% {
+                    opacity: 0;
+                }
+                100% {
+                    opacity: 1;
+                }
+            }
+            
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img  src="logo.png" alt="" class="dev">
+        <h1>DevTunisian</h1>
+        <div class="loaderBar"></div>
+        <div  id="msg">Invalid URL. Redirecting to default page.</div>
+    </div>
+    <script>
+        const message = document.getElementById('msg')
+        function isValidURL(U) {
+  // Use a regular expression or a more sophisticated validation library to check if the URL is valid
+  // For a basic example, we're checking if it starts with 'http://' or 'https://'
+        return( U.startsWith('http://') || U.startsWith('https://'))
+        }
+        function getDomainFromUrl(url) {
+        // Remove the "http://" or "https://" part if it exists
+        urlS = url.replace(/(^\w+:|^)\/\//, '');
+       
+        // Split the URL by "/" to get the first part, which is the domain
+        var parts = url.split('/');
+        return parts[0];
+        }
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('u');
+        isValidURL(id)
+        if (isValidURL(id)) {
+            message.style.display = 'none';
+            setTimeout(function() {
+                window.location.href = id;
+            }, 6000);
+        } else {
+            setTimeout(function() {
+                message.style.opacity = 1;
+            }, 6000);
+        }
+        if (id) {
+            var domain = getDomainFromUrl(id);
+            alert("The domain " + domain )
+        }
+        
+        document.title = Title;
+        // Set the image source based on the domain
+        var imgSrc;
+        var Title ;
+        if (domain === 'www.facebook.com') {
+            imgSrc = 'fc.png';
+            Title = 'Facebook';
+        } else if (domain === 'drive.google.com') {
+            imgSrc = 'Google_Drive_Logo.png';
+            Title = 'Google Drive';
+        } else if (domain === 'www.youtube.com') {
+            imgSrc = 'yt.png';
+            Title = 'YouTube';
+        } else if(domain === 'web.whatsapp.com') {
+            imgSrc ='wh.png'
+            Title = 'WhatsApp';
+        }
+        else {
+            // Default image if the domain doesn't match any of the above
+            imgSrc = 'default.png';
+            Title = 'Default Website';
+        }
+        var link = document.createElement('link');
+        document.title = Title;
+// Set the rel attribute to 'shortcut icon'
+        link.rel = 'shortcut icon';
+
+        // Set the type attribute to 'image/x-icon'
+        link.type = 'image/x-icon';
+
+        // Set the href attribute to the path of your favicon image
+        link.href = imgSrc;
+        document.head.appendChild(link);
+        
+    </script>
+</body>
+</html>
